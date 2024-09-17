@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "637125615863",
+    "project_id": "guridocpat",
+    "storage_bucket": "guridocpat.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:637125615863:android:f16236730570093799b3f2",
+        "android_client_info": {
+          "package_name": "com.guri.guridocpat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgkUnlBtR4z2x-r9oHaZ0xtJczFEEejYE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
