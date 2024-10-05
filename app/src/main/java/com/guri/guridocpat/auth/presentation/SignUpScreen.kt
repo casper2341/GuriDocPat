@@ -52,7 +52,7 @@ fun SignupScreen(navController: NavController, viewModel: LoginViewModel = hiltV
         state.error?.let { Text("Error: $it") }
         if (state.success) {
             navController.popBackStack()
-            navController.navigate(Screens.Login.route)
+            navController.navigate(Screens.UserSelection.route)
             viewModel.handleIntent(AuthIntent.MakeFalse)
         }
 

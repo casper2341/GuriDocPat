@@ -21,7 +21,6 @@ fun UserSelectionScreen(
     navController: NavController,
     viewModel: UserSelectionViewModel = hiltViewModel()
 ) {
-    println("Gurdeep recomposing ")
     var selectedRole by remember { mutableStateOf<String?>(null) }
 
     // Doctor-specific fields
@@ -64,33 +63,32 @@ fun UserSelectionScreen(
 
         if (selectedRole == "Doctor") {
             // Show Doctor-specific fields
-//            DoctorForm(
-//                degree = degree,
-//                onDegreeChange = { degree = it },
-//                fieldOfExpertise = fieldOfExpertise,
-//                onFieldChange = { fieldOfExpertise = it },
-//                govtId = govtId,
-//                onGovtIdChange = { govtId = it },
-//                dateOfBirth = dateOfBirth,
-//                onDateChange = { dateOfBirth = it },
-//                onPdfSelect = { pdfPickerLauncher.launch("application/pdf") },
-//                pdfUri = degreePdfUri
-//            )
+            DoctorForm(
+                degree = degree,
+                onDegreeChange = { degree = it },
+                fieldOfExpertise = fieldOfExpertise,
+                onFieldChange = { fieldOfExpertise = it },
+                govtId = govtId,
+                onGovtIdChange = { govtId = it },
+                dateOfBirth = dateOfBirth,
+                onDateChange = { dateOfBirth = it },
+                onPdfSelect = { pdfPickerLauncher.launch("application/pdf") },
+                pdfUri = degreePdfUri
+            )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Submit button to save doctor details
             Button(onClick = {
                 // Validate and store details
-                if (true) {
-//                if (degree.isNotEmpty() && fieldOfExpertise.isNotEmpty() && govtId.isNotEmpty() && dateOfBirth.isNotEmpty() && degreePdfUri != null) {
-//                    viewModel.storeDoctorDetails(
-//                        degree,
-//                        fieldOfExpertise,
-//                        govtId,
-//                        dateOfBirth,
-//                        degreePdfUri
-//                    )
+                if (degree.isNotEmpty() && fieldOfExpertise.isNotEmpty() && govtId.isNotEmpty() && dateOfBirth.isNotEmpty()) {
+                    viewModel.storeDoctorDetails(
+                        degree,
+                        fieldOfExpertise,
+                        govtId,
+                        dateOfBirth,
+                        degreePdfUri
+                    )
                     viewModel.storeUserRole("Doctor")
                     navController.navigate(Screens.DoctorDashBoard.route)
                 } else {

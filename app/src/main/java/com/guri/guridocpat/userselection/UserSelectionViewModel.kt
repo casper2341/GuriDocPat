@@ -42,7 +42,7 @@ class UserSelectionViewModel @Inject constructor(
     }
 
     // Store Doctor Details including Degree PDF upload
-    fun storeDoctorDetails(degree: String, field: String, govtId: String, dob: String, pdfUri: Uri?) {
+    fun storeDoctorDetails(degree: String, field: String, govtId: String, dob: String, pdfUri: Uri? = null) {
         val userId = auth.currentUser?.uid
         if (userId != null && pdfUri != null) {
             val userRef = firestore.collection("users").document(userId)
@@ -62,10 +62,12 @@ class UserSelectionViewModel @Inject constructor(
                         )
 
                         // Save doctor details in Firestore
+                        Log.d("Gurdeep ", " Success Doctor Data: $doctorData")
                         userRef.set(doctorData)
                     }
                 }
-                .addOnFailureListener {
+                .addOnFailureListener { error ->
+                    Log.d("Gurdeep ", "Failure Doctor Data : $error")
                     // Handle upload failure
                 }
         }
