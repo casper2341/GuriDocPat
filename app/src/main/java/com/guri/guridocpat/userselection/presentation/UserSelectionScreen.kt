@@ -102,6 +102,7 @@ fun UserSelectionScreen(
         if (selectedRole == "Patient") {
             // Proceed directly to Patient Dashboard
             Button(onClick = {
+                viewModel.storePatientDetails()
                 viewModel.storeUserRole("Patient")
                 navController.navigate(Screens.PatientDashBoard.route)
             }) {

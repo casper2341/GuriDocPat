@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.guri.guridocpat.auth.presentation.AuthIntent
 import com.guri.guridocpat.auth.presentation.AuthState
+import com.guri.guridocpat.common.data.User
 import com.guri.guridocpat.navgraph.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -88,11 +89,47 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _state.value = AuthState(isLoading = true)
             try {
-                auth.createUserWithEmailAndPassword(email, password).await()
-                _state.value = AuthState(success = true)
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val user = auth.currentUser
+                            val generatedUserId = user?.uid  // Retrieve the generated unique user ID
+                            Log.d("Signup", "User ID: $generatedUserId")
+
+                            // Use the `generatedUserId` to store additional user data in Firestore if needed
+                            storeUserInFirestore(userId = generatedUserId, email = email)
+                        } else {
+                            // Handle signup failure
+                            _state.value = AuthState(success = false, error = task.exception?.message)
+                            Log.e("Signup", "Signup failed: ${task.exception?.message}")
+                        }
+                    }
             } catch (e: Exception) {
                 _state.value = AuthState(success = false, error = e.message)
             }
+        }
+    }
+
+    private fun storeUserInFirestore(userId: String?, email: String) {
+        if (userId != null) {
+            val firestore = FirebaseFirestore.getInstance()
+            val userDocRef = firestore.collection("users").document(userId)
+
+            // Create a User object with the provided email and role
+            val user = User(id = userId, email = email, createdAt = System.currentTimeMillis())
+
+            userDocRef.set(user)
+                .addOnSuccessListener {
+                    _state.value = AuthState(success = true)
+                    Log.d("Firestore", "User data stored successfully with data class.")
+                }
+                .addOnFailureListener { e ->
+                    _state.value = AuthState(success = false, error = e.message)
+                    Log.e("Firestore", "Error storing user data", e)
+                }
+        } else {
+            _state.value = AuthState(success = false, error = "User ID is null, cannot store user data")
+            Log.e("Firestore", "User ID is null, cannot store user data.")
         }
     }
 }

@@ -2,15 +2,15 @@ package com.guri.guridocpat.navgraph
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextAlign
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.guri.guridocpat.auth.presentation.LoginScreen
 import com.guri.guridocpat.auth.presentation.SignupScreen
+import com.guri.guridocpat.doctordashboard.presentation.DoctorDashboardScreen
+import com.guri.guridocpat.patientdashboard.presentation.PatientDashboard
 import com.guri.guridocpat.splash.presentation.SplashScreen
 import com.guri.guridocpat.userselection.presentation.UserSelectionScreen
 
@@ -39,10 +39,10 @@ fun DoctorPatientApp(modifier: Modifier) {
             UserSelectionScreen(navController = navController)
         }
         composable(Screens.DoctorDashBoard.route) {
-            Text("Success Doctor", modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center)
+            DoctorDashboardScreen(modifier = Modifier.fillMaxSize(), navController = navController)
         }
         composable(Screens.PatientDashBoard.route) {
-            Text("Success Patient", modifier = Modifier.fillMaxSize(), textAlign = TextAlign.Center)
+            PatientDashboard(modifier = Modifier.fillMaxSize(), navController = navController)
         }
     }
 }

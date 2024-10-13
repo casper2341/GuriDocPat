@@ -6,6 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.guri.guridocpat.common.data.Doctor
+import com.guri.guridocpat.common.data.Patient
+import com.guri.guridocpat.common.data.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -27,7 +30,16 @@ class UserSelectionViewModel @Inject constructor(
         val userId = auth.currentUser?.uid
         if (userId != null) {
             val userRef = firestore.collection("users").document(userId)
-            val userData = hashMapOf("role" to role)
+            val userData = User(id = userId, email = auth.currentUser?.email.orEmpty(), role = role)
+
+            // Save user info in 'users' collection
+            userRef.set(userData)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "User base data stored successfully.")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("Firestore", "Error storing user base data", e)
+                }
 
             userRef.set(userData)
                 .addOnSuccessListener {
@@ -42,34 +54,62 @@ class UserSelectionViewModel @Inject constructor(
     }
 
     // Store Doctor Details including Degree PDF upload
-    fun storeDoctorDetails(degree: String, field: String, govtId: String, dob: String, pdfUri: Uri? = null) {
+    fun storeDoctorDetails(
+        degree: String,
+        field: String,
+        govtId: String,
+        dob: String,
+        pdfUri: Uri? = null
+    ) {
         val userId = auth.currentUser?.uid
         if (userId != null && pdfUri != null) {
-            val userRef = firestore.collection("users").document(userId)
-
             // Upload PDF to Firebase Storage
             val storageRef = storage.reference.child("degree_pdfs/$userId.pdf")
             storageRef.putFile(pdfUri)
                 .addOnSuccessListener { taskSnapshot ->
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
-                        val doctorData = hashMapOf(
-                            "role" to "Doctor",
-                            "degree" to degree,
-                            "fieldOfExpertise" to field,
-                            "governmentId" to govtId,
-                            "dateOfBirth" to dob,
-                            "degreePdfUrl" to uri.toString()
+                        val doctorData = Doctor(
+                            doctorId = userId,
+                            email = auth.currentUser?.email.orEmpty(),
+                            degrees = listOf(degree),
+                            governmentId = govtId,
+                            degreePDFUrl = listOf(uri.toString()),
+                            fieldOfExpertise = field,
+                            dateOfBirth = dob
                         )
 
                         // Save doctor details in Firestore
                         Log.d("Gurdeep ", " Success Doctor Data: $doctorData")
-                        userRef.set(doctorData)
+                        val doctorRef = firestore.collection("doctors").document(userId)
+                        doctorRef.set(doctorData).addOnSuccessListener {
+                            Log.d("Gurdeep ", "Success Doctor Data : $doctorData")
+                        }.addOnFailureListener {
+                            Log.d("Gurdeep ", "Failure Doctor Data : $it")
+                        }
                     }
                 }
                 .addOnFailureListener { error ->
                     Log.d("Gurdeep ", "Failure Doctor Data : $error")
                     // Handle upload failure
                 }
+        }
+    }
+
+    fun storePatientDetails() {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            // Upload PDF to Firebase Storage
+            val patientData = Patient(
+                patientId = userId,
+                gender = "male",
+                email = auth.currentUser?.email.orEmpty(),
+            )
+            val doctorRef = firestore.collection("patients").document(userId)
+            doctorRef.set(patientData).addOnSuccessListener {
+                Log.d("Gurdeep ", "Success Doctor Data : $patientData")
+            }.addOnFailureListener {
+                Log.d("Gurdeep ", "Failure Doctor Data : $it")
+            }
         }
     }
 }
