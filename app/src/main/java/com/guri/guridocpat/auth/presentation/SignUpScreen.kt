@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.guri.guridocpat.auth.LoginViewModel
-import com.guri.guridocpat.navgraph.Screens
+import com.guri.guridocpat.appnavgraph.Screens
 
 @Composable
 fun SignupScreen(navController: NavController, viewModel: LoginViewModel = hiltViewModel()) {

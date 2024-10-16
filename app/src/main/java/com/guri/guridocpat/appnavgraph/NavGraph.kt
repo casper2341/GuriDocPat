@@ -1,4 +1,4 @@
-package com.guri.guridocpat.navgraph
+package com.guri.guridocpat.appnavgraph
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding

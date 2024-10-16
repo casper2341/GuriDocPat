@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.guri.guridocpat.navgraph.Screens
+import com.guri.guridocpat.appnavgraph.Screens
 
 @Composable
 fun UserSelectionScreen(

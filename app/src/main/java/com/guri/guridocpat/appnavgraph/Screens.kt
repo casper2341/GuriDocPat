@@ -1,4 +1,4 @@
-package com.guri.guridocpat.navgraph
+package com.guri.guridocpat.appnavgraph
 
 sealed class Screens(val route: String) {
     data object Splash : Screens("splash_screen")

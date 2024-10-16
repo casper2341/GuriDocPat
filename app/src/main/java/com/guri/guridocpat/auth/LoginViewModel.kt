@@ -8,7 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.guri.guridocpat.auth.presentation.AuthIntent
 import com.guri.guridocpat.auth.presentation.AuthState
 import com.guri.guridocpat.common.data.User
-import com.guri.guridocpat.navgraph.Screens
+import com.guri.guridocpat.appnavgraph.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

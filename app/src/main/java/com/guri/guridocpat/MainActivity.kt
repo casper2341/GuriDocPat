@@ -4,28 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.guri.guridocpat.auth.LoginViewModel
-import com.guri.guridocpat.auth.presentation.LoginScreen
-import com.guri.guridocpat.auth.presentation.SignupScreen
-import com.guri.guridocpat.navgraph.DoctorPatientApp
-import com.guri.guridocpat.navgraph.Screens
-import com.guri.guridocpat.splash.presentation.SplashScreen
+import com.guri.guridocpat.appnavgraph.DoctorPatientApp
 import com.guri.guridocpat.ui.theme.GuriDocPatTheme
-import com.guri.guridocpat.userselection.UserSelectionViewModel
-import com.guri.guridocpat.userselection.presentation.UserSelectionScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

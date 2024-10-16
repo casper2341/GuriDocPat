@@ -14,28 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
-import com.guri.guridocpat.navgraph.Screens
+import com.guri.guridocpat.appnavgraph.Screens
 
 @Composable
 fun PatientDashboard(modifier: Modifier = Modifier, navController: NavController) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text("Welcome to the Patient Dashboard!")
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        Button(onClick = {
-            FirebaseAuth.getInstance().signOut()
-            navController.navigate(Screens.Login.route) {
-                popUpTo(Screens.DoctorDashBoard.route) { inclusive = true }
-            }
-        }) {
-            Text("Sign Out")
-        }
-    }
 }
