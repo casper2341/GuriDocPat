@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-
+import com.guri.guridocpat.doctordashboard.data.BottomNavItem
 
 @Composable
 fun BottomBar(
