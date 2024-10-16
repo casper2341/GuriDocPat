@@ -39,7 +39,7 @@ fun DoctorPatientApp(modifier: Modifier) {
             UserSelectionScreen(navController = navController)
         }
         composable(Screens.DoctorDashBoard.route) {
-            DoctorDashboardScreen(modifier = Modifier.fillMaxSize(), navController = navController)
+            DoctorDashboardScreen(modifier = Modifier.fillMaxSize())
         }
         composable(Screens.PatientDashBoard.route) {
             PatientDashboard(modifier = Modifier.fillMaxSize(), navController = navController)
