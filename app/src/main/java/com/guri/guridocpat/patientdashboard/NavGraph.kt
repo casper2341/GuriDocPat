@@ -2,13 +2,18 @@ package com.guri.guridocpat.patientdashboard
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.guri.guridocpat.appnavgraph.Screens
+import com.guri.guridocpat.doctorslist.presentation.DoctorListScreen
 import com.guri.guridocpat.patientdashboard.data.BottomNavItem
+import com.guri.guridocpat.profile.presentation.ProfileEditScreen
+import com.guri.guridocpat.profile.presentation.ProfileScreen
 
 @Composable
-fun NavigationGraph(
+fun PatientBottomBarNavigationGraph(
     navController: NavHostController,
     onBottomBarVisibilityChanged: (Boolean) -> Unit
 ) {
@@ -19,9 +24,8 @@ fun NavigationGraph(
             Text("Gurdeep Home")
         }
         composable(BottomNavItem.Doctors.route) {
-            //  PatientsScreen()
+            DoctorListScreen()
             onBottomBarVisibilityChanged(true)
-            Text("Gurdeep Patients")
         }
         composable(BottomNavItem.Appointments.route) {
             //  AppointmentsScreen()
@@ -29,9 +33,16 @@ fun NavigationGraph(
             Text("Gurdeep Appointments")
         }
         composable(BottomNavItem.Profile.route) {
-            //  ProfileScreen()
+            ProfileScreen(viewModel = hiltViewModel(), navController = navController)
             onBottomBarVisibilityChanged(true)
-            Text("Gurdeep Profile")
+        }
+        composable(Screens.ProfileEdit.route) {
+            ProfileEditScreen(
+                onSave = {
+                    navController.popBackStack() // Go back after saving
+                }
+            )
+            onBottomBarVisibilityChanged(false)
         }
     }
 }

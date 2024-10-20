@@ -24,11 +24,19 @@ fun UserSelectionScreen(
     var selectedRole by remember { mutableStateOf<String?>(null) }
 
     // Doctor-specific fields
+    var name by remember { mutableStateOf("") }
     var degree by remember { mutableStateOf("") }
     var fieldOfExpertise by remember { mutableStateOf("") }
     var govtId by remember { mutableStateOf("") }
     var dateOfBirth by remember { mutableStateOf("") }
     var degreePdfUri by remember { mutableStateOf<Uri?>(null) }
+
+    // Patient-specific fields
+    var patientName by remember { mutableStateOf("") }
+    var patientEmail by remember { mutableStateOf("") }
+    var patientPhone by remember { mutableStateOf("") }
+    var patientDob by remember { mutableStateOf("") }
+    var bloodType by remember { mutableStateOf("") }
 
     // File picker launcher for PDF selection
     val pdfPickerLauncher = rememberLauncherForActivityResult(
@@ -64,6 +72,8 @@ fun UserSelectionScreen(
         if (selectedRole == "Doctor") {
             // Show Doctor-specific fields
             DoctorForm(
+                name = name,
+                onNameChange = { name = it },
                 degree = degree,
                 onDegreeChange = { degree = it },
                 fieldOfExpertise = fieldOfExpertise,
@@ -81,13 +91,14 @@ fun UserSelectionScreen(
             // Submit button to save doctor details
             Button(onClick = {
                 // Validate and store details
-                if (degree.isNotEmpty() && fieldOfExpertise.isNotEmpty() && govtId.isNotEmpty() && dateOfBirth.isNotEmpty()) {
+                if (name.isNotBlank() && degree.isNotBlank() && fieldOfExpertise.isNotBlank() && govtId.isNotBlank() && dateOfBirth.isNotBlank()) {
                     viewModel.storeDoctorDetails(
-                        degree,
-                        fieldOfExpertise,
-                        govtId,
-                        dateOfBirth,
-                        degreePdfUri
+                        name = name,
+                        degree = degree,
+                        field = fieldOfExpertise,
+                        govtId = govtId,
+                        dob = dateOfBirth,
+                        pdfUri = degreePdfUri
                     )
                     viewModel.storeUserRole("Doctor")
                     navController.navigate(Screens.DoctorDashBoard.route)
@@ -100,11 +111,38 @@ fun UserSelectionScreen(
         }
 
         if (selectedRole == "Patient") {
-            // Proceed directly to Patient Dashboard
+            // Show Patient-specific fields
+            PatientForm(
+                name = patientName,
+                onNameChange = { patientName = it },
+                email = patientEmail,
+                onEmailChange = { patientEmail = it },
+                phone = patientPhone,
+                onPhoneChange = { patientPhone = it },
+                dateOfBirth = patientDob,
+                onDateChange = { patientDob = it },
+                bloodType = bloodType,
+                onBloodTypeChange = { bloodType = it }
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Submit button to save patient details
             Button(onClick = {
-                viewModel.storePatientDetails()
-                viewModel.storeUserRole("Patient")
-                navController.navigate(Screens.PatientDashBoard.route)
+                // Validate and store patient details
+                if (patientName.isNotEmpty() && patientEmail.isNotEmpty() && patientPhone.isNotEmpty() && patientDob.isNotEmpty()) {
+                    viewModel.storePatientDetails(
+                        name = patientName,
+                        email = patientEmail,
+                        phone = patientPhone,
+                        dateOfBirth = patientDob,
+                        bloodType = bloodType
+                    )
+                    viewModel.storeUserRole("Patient")
+                    navController.navigate(Screens.PatientDashBoard.route)
+                } else {
+                    // Handle validation failure (optional)
+                }
             }) {
                 Text("Proceed to Patient Dashboard")
             }
@@ -114,6 +152,8 @@ fun UserSelectionScreen(
 
 @Composable
 fun DoctorForm(
+    name: String,
+    onNameChange: (String) -> Unit,
     degree: String,
     onDegreeChange: (String) -> Unit,
     fieldOfExpertise: String,
@@ -125,6 +165,15 @@ fun DoctorForm(
     onPdfSelect: () -> Unit,
     pdfUri: Uri?
 ) {
+    TextField(
+        value = name,
+        onValueChange = onNameChange,
+        label = { Text("Name") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
     // Degree input
     TextField(
         value = degree,
@@ -175,4 +224,67 @@ fun DoctorForm(
     pdfUri?.let {
         Text("PDF selected: ${it.lastPathSegment}")
     }
+}
+
+
+@Composable
+fun PatientForm(
+    name: String,
+    onNameChange: (String) -> Unit,
+    email: String,
+    onEmailChange: (String) -> Unit,
+    phone: String,
+    onPhoneChange: (String) -> Unit,
+    dateOfBirth: String,
+    onDateChange: (String) -> Unit,
+    bloodType: String,
+    onBloodTypeChange: (String) -> Unit
+) {
+    // Name input
+    TextField(
+        value = name,
+        onValueChange = onNameChange,
+        label = { Text("Name") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Email input
+    TextField(
+        value = email,
+        onValueChange = onEmailChange,
+        label = { Text("Email") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Phone input
+    TextField(
+        value = phone,
+        onValueChange = onPhoneChange,
+        label = { Text("Phone") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Date of Birth input
+    TextField(
+        value = dateOfBirth,
+        onValueChange = onDateChange,
+        label = { Text("Date of Birth") },
+        modifier = Modifier.fillMaxWidth()
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    // Blood Type input (optional)
+    TextField(
+        value = bloodType,
+        onValueChange = onBloodTypeChange,
+        label = { Text("Blood Type (optional)") },
+        modifier = Modifier.fillMaxWidth()
+    )
 }

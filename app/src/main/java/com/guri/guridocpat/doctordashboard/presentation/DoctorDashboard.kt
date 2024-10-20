@@ -39,7 +39,7 @@ fun DoctorDashboardScreen(
         },
         bottomBar = {
             if (buttonsVisible) {
-                BottomBar(
+                DoctorBottomBar(
                     navController = navController,
                     state = buttonsVisible,
                     modifier = Modifier

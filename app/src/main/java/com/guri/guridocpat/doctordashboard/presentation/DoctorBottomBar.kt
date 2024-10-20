@@ -15,7 +15,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.guri.guridocpat.doctordashboard.data.BottomNavItem
 
 @Composable
-fun BottomBar(
+fun DoctorBottomBar(
     navController: NavHostController,
     state: Boolean,
     modifier: Modifier = Modifier

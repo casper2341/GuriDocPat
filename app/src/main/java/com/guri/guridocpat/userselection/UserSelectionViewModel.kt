@@ -32,15 +32,6 @@ class UserSelectionViewModel @Inject constructor(
             val userRef = firestore.collection("users").document(userId)
             val userData = User(id = userId, email = auth.currentUser?.email.orEmpty(), role = role)
 
-            // Save user info in 'users' collection
-            userRef.set(userData)
-                .addOnSuccessListener {
-                    Log.d("Firestore", "User base data stored successfully.")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("Firestore", "Error storing user base data", e)
-                }
-
             userRef.set(userData)
                 .addOnSuccessListener {
                     Log.d("Firestore", "User role successfully stored")
@@ -55,6 +46,7 @@ class UserSelectionViewModel @Inject constructor(
 
     // Store Doctor Details including Degree PDF upload
     fun storeDoctorDetails(
+        name: String,
         degree: String,
         field: String,
         govtId: String,
@@ -69,6 +61,7 @@ class UserSelectionViewModel @Inject constructor(
                 .addOnSuccessListener { taskSnapshot ->
                     storageRef.downloadUrl.addOnSuccessListener { uri ->
                         val doctorData = Doctor(
+                            name = name,
                             doctorId = userId,
                             email = auth.currentUser?.email.orEmpty(),
                             degrees = listOf(degree),
@@ -110,6 +103,32 @@ class UserSelectionViewModel @Inject constructor(
             }.addOnFailureListener {
                 Log.d("Gurdeep ", "Failure Doctor Data : $it")
             }
+        }
+    }
+    fun storePatientDetails(
+        name: String,
+        email: String,
+        phone: String,
+        dateOfBirth: String,
+        bloodType: String
+    ) {
+        val userId = auth.currentUser?.uid
+        if (userId != null) {
+            val patientData = Patient(
+                patientId = userId,
+                email = email,
+                name = name,
+                dateOfBirth = dateOfBirth,
+                bloodType = bloodType,
+                phone = phone
+            )
+            firestore.collection("patients").document(userId).set(patientData)
+                .addOnSuccessListener {
+                    Log.d("Gurdeep ", "Success Patient Data : $patientData")
+                }
+                .addOnFailureListener {
+                    Log.d("Gurdeep ", "Failure Patient Data : $patientData")
+                }
         }
     }
 }
