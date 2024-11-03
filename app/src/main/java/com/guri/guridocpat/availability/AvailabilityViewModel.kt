@@ -36,21 +36,44 @@ class AvailabilityViewModel @Inject constructor(
     fun loadDoctorAvailability(doctorId: String) {
         viewModelScope.launch {
             val availabilityMap = doctorRepository.getAllAvailabilityForDoctor(doctorId)
-            println("Gurdeep availability map ${availabilityMap.toString()}")
+            println("Gurdeep availability map: $availabilityMap")
+
             _state.value = _state.value.copy(
                 availableSlots = availabilityMap.mapNotNull { (key, timeSlots) ->
                     try {
+                        // Parse the date from the key
                         val date = SimpleDateFormat("yyyy-MM-dd").parse(key)
                         date?.let {
-                            it to timeSlots.map { slot -> "${slot.startTime}-${slot.endTime}" }
-                        } // Map to a list of strings representing the slots
+                            // Map to a list of strings representing the slots in the format "start-end"
+                            it to timeSlots.mapNotNull { slot ->
+                                // Extract start and end times from the TimeSlot object
+                                val startTime = slot.startTime
+                                val endTime = slot.endTime
+
+                                // Use regex to extract only the time portion
+                                val startHour = startTime.split(" ")[1] // Get the time part
+                                val endHour = endTime.split(" ")[1] // Get the time part
+
+                                // Check if the time format is valid before parsing
+                                if (startHour.matches(Regex("\\d{1,2}:\\d{2}")) && endHour.matches(Regex("\\d{1,2}:\\d{2}"))) {
+                                    val startHourInt = startHour.split(":")[0].toInt() // Get the hour part
+                                    val endHourInt = endHour.split(":")[0].toInt() // Get the hour part
+
+                                    // Format the start and end to "start-end" (e.g., "9-11")
+                                    "${startHourInt % 12}-${endHourInt % 12 + if (endHourInt < 12) 0 else 12}"
+                                } else {
+                                    println("Invalid time format for slot: $slot")
+                                    null // Skip invalid time slots
+                                }
+                            } // Filter out any null entries due to invalid times
+                        }
                     } catch (e: ParseException) {
                         e.printStackTrace()
                         null // Skip any entry that cannot be parsed
                     }
                 }.toMap()
             )
-            println("Gurdeep available slots ${_state.value.availableSlots}")
+            println("Gurdeep available slots: ${_state.value.availableSlots}")
         }
         loadCurrentMonth()
     }

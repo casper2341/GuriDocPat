@@ -148,10 +148,7 @@ fun TimeSlotSelector(
 ) {
     val slots = listOf("9-11", "11-1", "1-3", "3-5", "5-7", "7-9")
 
-    val selectedTimeSlots = selectedSlots.map { slot ->
-        slot.replace(":00", "").substringAfter(" ").substringBefore("-") + "-" + slot.replace(":00", "").substringAfterLast(" ")
-    }
-    println("Gurdeep selected slots $selectedTimeSlots ")
+    println("Gurdeep selected slots $selectedSlots ")
     println("Gurdeep slots $slots")
 
     Column(
@@ -169,7 +166,7 @@ fun TimeSlotSelector(
                     .padding(vertical = 4.dp)
             ) {
                 Checkbox(
-                    checked = selectedTimeSlots.contains(slot),
+                    checked = selectedSlots.contains(slot),
                     onCheckedChange = {
                         println("Gurdeep Checkbox toggled for slot: $slot")
                         onSlotToggled(slot)
