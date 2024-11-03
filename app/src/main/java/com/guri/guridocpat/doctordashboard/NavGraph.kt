@@ -6,7 +6,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.guri.guridocpat.appointment.presentation.AppointmentListScreen
+import com.guri.guridocpat.availability.presentation.DoctorAvailabilityScreen
 import com.guri.guridocpat.doctordashboard.data.BottomNavItem
+import com.guri.guridocpat.doctorhome.presentation.DoctorHomeScreen
 import com.guri.guridocpat.profile.presentation.ProfileScreen
 
 @Composable
@@ -16,9 +19,8 @@ fun NavigationGraph(
 ) {
     NavHost(navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) {
-            // HomeScreen()
+            DoctorHomeScreen(navController = navController)
             onBottomBarVisibilityChanged(true)
-            Text("Gurdeep Home")
         }
         composable(BottomNavItem.Patients.route) {
             //  PatientsScreen()
@@ -26,14 +28,18 @@ fun NavigationGraph(
             Text("Gurdeep Patients")
         }
         composable(BottomNavItem.Appointments.route) {
-            //  AppointmentsScreen()
+            AppointmentListScreen()
             onBottomBarVisibilityChanged(true)
-            Text("Gurdeep Appointments")
         }
         composable(BottomNavItem.Profile.route) {
-            //  ProfileScreen()
             onBottomBarVisibilityChanged(true)
            ProfileScreen(viewModel = hiltViewModel(), navController = navController)
+        }
+        composable("doctorAvailability") {
+            DoctorAvailabilityScreen()
+        }
+        composable("bookAppointment") {
+            AppointmentListScreen()
         }
     }
 }

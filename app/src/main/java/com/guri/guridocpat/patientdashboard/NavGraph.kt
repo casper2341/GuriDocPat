@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.guri.guridocpat.appnavgraph.Screens
+import com.guri.guridocpat.doctordetails.presentation.DoctorDetailsScreen
 import com.guri.guridocpat.doctorslist.presentation.DoctorListScreen
 import com.guri.guridocpat.patientdashboard.data.BottomNavItem
 import com.guri.guridocpat.profile.presentation.ProfileEditScreen
@@ -24,7 +25,7 @@ fun PatientBottomBarNavigationGraph(
             Text("Gurdeep Home")
         }
         composable(BottomNavItem.Doctors.route) {
-            DoctorListScreen()
+            DoctorListScreen(navController = navController)
             onBottomBarVisibilityChanged(true)
         }
         composable(BottomNavItem.Appointments.route) {
@@ -43,6 +44,16 @@ fun PatientBottomBarNavigationGraph(
                 }
             )
             onBottomBarVisibilityChanged(false)
+        }
+        composable("doctorDetails/{doctorId}") { backStackEntry ->
+            val doctorId = backStackEntry.arguments?.getString("doctorId").orEmpty()
+            DoctorDetailsScreen(doctorId = doctorId, navController = navController)
+        }
+        composable("doctorAvailability/{doctorId}") {
+
+        }
+        composable("bookAppointment/{doctorId}") {
+
         }
     }
 }

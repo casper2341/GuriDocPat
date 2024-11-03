@@ -33,7 +33,13 @@ fun DoctorDashboardScreen(
                     restoreState = true
                 }
             }, onMenuClick = {
-
+                navController.navigate("doctorAvailability") {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
+                }
             }
             )
         },
