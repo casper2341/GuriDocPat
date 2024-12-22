@@ -59,7 +59,7 @@ fun DoctorDetailsScreen(
                     Text("View Availability")
                 }
                 Button(
-                    onClick = { navController.navigate("bookAppointment/${doctorId}") },
+                    onClick = { navController.navigate("bookDate/${doctorId}") },
                     modifier = Modifier.fillMaxWidth().padding(8.dp)
                 ) {
                     Text("Book Appointment")

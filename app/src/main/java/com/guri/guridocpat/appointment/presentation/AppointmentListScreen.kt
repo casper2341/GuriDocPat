@@ -30,7 +30,6 @@ fun AppointmentListScreen(
     modifier: Modifier = Modifier,
     viewModel: AppointmentListViewModel = hiltViewModel()
 ) {
-
     val appointments by viewModel.appointments.collectAsState()
 
     LazyColumn {

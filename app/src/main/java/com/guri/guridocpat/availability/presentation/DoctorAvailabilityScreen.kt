@@ -1,5 +1,7 @@
 package com.guri.guridocpat.availability.presentation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -17,7 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,14 +30,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.guri.guridocpat.availability.AvailabilityEvent
-import com.guri.guridocpat.availability.AvailabilityViewModel
+import com.guri.guridocpat.availability.viewmodel.AvailabilityEvent
+import com.guri.guridocpat.availability.viewmodel.DoctorAvailabilityViewModel
+import com.guri.guridocpat.common.data.TimeSlot
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DoctorAvailabilityScreen(viewModel: AvailabilityViewModel = hiltViewModel()) {
+fun DoctorAvailabilityScreen(viewModel: DoctorAvailabilityViewModel = hiltViewModel()) {
     LaunchedEffect(Unit) {
         viewModel.loadDoctorAvailability(doctorId = viewModel.doctorId) // Replace with actual doctor ID logic
     }
@@ -44,9 +47,11 @@ fun DoctorAvailabilityScreen(viewModel: AvailabilityViewModel = hiltViewModel())
     val state by viewModel.state.collectAsState()
 
     Box {
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             Text("Select Date for Availability", style = MaterialTheme.typography.headlineMedium)
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -54,7 +59,7 @@ fun DoctorAvailabilityScreen(viewModel: AvailabilityViewModel = hiltViewModel())
             AvailabilityCalendar(
                 currentMonth = state.currentMonth,
                 selectedDate = state.selectedDate,
-                onDateSelected = { viewModel.onEvent(AvailabilityEvent.DateSelected(it)) }
+                onDateSelected = { viewModel.selectDate(it) }
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -62,13 +67,17 @@ fun DoctorAvailabilityScreen(viewModel: AvailabilityViewModel = hiltViewModel())
             state.selectedDate?.let { date ->
                 TimeSlotSelector(
                     date = date,
-                    selectedSlots = state.availableSlots[date] ?: listOf(),
-                    onSlotToggled = { slot ->
-                        viewModel.onEvent(
-                            AvailabilityEvent.SlotToggled(
-                                date,
-                                slot
-                            )
+                    selectedSlots = state.selectedSlots,
+                    onSaveSlot = { slot ->
+                        viewModel.saveSlot(
+                            date,
+                            slot
+                        )
+                    },
+                    onDeleteSlot = { slot ->
+                        viewModel.deleteSlots(
+                            date,
+                            slot
                         )
                     }
                 )
@@ -76,7 +85,7 @@ fun DoctorAvailabilityScreen(viewModel: AvailabilityViewModel = hiltViewModel())
         }
 
         Button(
-            onClick = { viewModel.onEvent(AvailabilityEvent.SubmitAvailability) },
+            onClick = { viewModel.submitAvailability() },
             modifier = Modifier,
             enabled = state.selectedDate != null
         ) {
@@ -139,17 +148,21 @@ fun AvailabilityCalendar(
     }
 }
 
-
 @Composable
 fun TimeSlotSelector(
     date: Date,
-    selectedSlots: List<String>,
-    onSlotToggled: (String) -> Unit
+    selectedSlots: List<TimeSlot>,
+    onSaveSlot: (TimeSlot) -> Unit,
+    onDeleteSlot: (TimeSlot) -> Unit
 ) {
-    val slots = listOf("9-11", "11-1", "1-3", "3-5", "5-7", "7-9")
-
-    println("Gurdeep selected slots $selectedSlots ")
-    println("Gurdeep slots $slots")
+    val slots = listOf(
+        TimeSlot(startTime = "09:00", endTime = "11:00"),
+        TimeSlot(startTime = "11:00", endTime = "13:00"),
+        TimeSlot(startTime = "13:00", endTime = "15:00"),
+        TimeSlot(startTime = "15:00", endTime = "17:00"),
+        TimeSlot(startTime = "17:00", endTime = "19:00"),
+        TimeSlot(startTime = "21:00", endTime = "23:00")
+    )
 
     Column(
         modifier = Modifier
@@ -165,14 +178,21 @@ fun TimeSlotSelector(
                     .fillMaxWidth()
                     .padding(vertical = 4.dp)
             ) {
-                Checkbox(
-                    checked = selectedSlots.contains(slot),
-                    onCheckedChange = {
-                        println("Gurdeep Checkbox toggled for slot: $slot")
-                        onSlotToggled(slot)
+                Text(slot.startTime + "-" + slot.endTime)
+
+                val matchingSlot =
+                    selectedSlots.find { it.startTime == slot.startTime && it.endTime == slot.endTime }
+                if (matchingSlot == null) {
+                    Button(onClick = { onSaveSlot(slot) }) {
+                        Text("Save")
                     }
-                )
-                Text(slot)
+                }
+
+                if (matchingSlot != null) {
+                    Button(onClick = { onDeleteSlot(slot) }) {
+                        Text("Delete")
+                    }
+                }
             }
         }
     }

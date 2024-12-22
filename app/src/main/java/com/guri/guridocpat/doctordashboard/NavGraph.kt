@@ -1,5 +1,7 @@
 package com.guri.guridocpat.doctordashboard
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -12,6 +14,7 @@ import com.guri.guridocpat.doctordashboard.data.BottomNavItem
 import com.guri.guridocpat.doctorhome.presentation.DoctorHomeScreen
 import com.guri.guridocpat.profile.presentation.ProfileScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun NavigationGraph(
     navController: NavHostController,

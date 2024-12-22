@@ -20,6 +20,7 @@ interface DoctorRepository {
     fun getAvailabilityForDoctor(doctorId: String): Flow<List<Availability>>
     suspend fun addOrUpdateAvailability(availability: Availability)
 
-    suspend fun getAvailableSlotsForDate(doctorId: String, date: Date): List<String>
-    suspend fun getAllAvailabilityForDoctor(doctorId: String): Map<String, List<TimeSlot>>
+    suspend fun getAvailableSlotsForDate(doctorId: String, date: Date): List<TimeSlot>
+    suspend fun getAllAvailabilityForDoctor(doctorId: String): Pair<Availability?, Map<Date, List<TimeSlot>>>
+    suspend fun deleteAvailability(availabilityId: String)
 }

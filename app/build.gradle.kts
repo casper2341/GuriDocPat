@@ -95,6 +95,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
     implementation("com.google.android.gms:play-services-auth:21.2.0")
+
+    implementation("com.google.code.gson:gson:2.10.1")
 }
 
 kapt {
