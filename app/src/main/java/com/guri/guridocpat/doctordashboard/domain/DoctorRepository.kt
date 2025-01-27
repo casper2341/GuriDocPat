@@ -14,7 +14,7 @@ interface DoctorRepository {
     fun getDoctors(): Flow<List<Doctor>>
     fun getDoctorById(doctorId: String): Flow<Doctor?>
 
-    fun getAppointmentsForDoctor(doctorId: String): Flow<List<Appointment>>
+    fun getAllAppointments(doctorId: String): Flow<List<Appointment>>
     suspend fun updateAppointmentStatus(appointmentId: String, newStatus: String)
 
     fun getAvailabilityForDoctor(doctorId: String): Flow<List<Availability>>

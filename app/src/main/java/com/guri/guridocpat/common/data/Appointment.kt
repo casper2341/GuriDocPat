@@ -1,5 +1,6 @@
 package com.guri.guridocpat.common.data
 
+import java.sql.Time
 import java.util.Date
 
 data class Qualification(
@@ -13,8 +14,8 @@ data class Appointment(
     val doctorId: String = "",                 // ID of the doctor associated with the appointment
     val patientId: String = "",                // ID of the patient
     val patientName: String = "",              // Patient's name, for quick reference
-    val appointmentDate: String = "",          // Scheduled date (e.g., "YYYY-MM-DD")
-    val appointmentTime: String = "",          // Scheduled time (e.g., "14:00")
+    val appointmentDate: Date = Date(),          // Scheduled date (e.g., "YYYY-MM-DD")
+    val appointmentTime: TimeSlot = TimeSlot(),          // Scheduled time (e.g., "14:00")
     val status: String = "pending",            // Status: "pending", "confirmed", "cancelled", etc.
     val symptoms: String = "",                 // Brief description of symptoms provided by the patient
     val doctorNotes: String = "",              // Additional notes or comments from the doctor

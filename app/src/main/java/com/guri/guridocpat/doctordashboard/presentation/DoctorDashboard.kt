@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.guri.guridocpat.doctordashboard.NavigationGraph
+import com.guri.guridocpat.doctordashboard.DoctorBottomBarNavigationGraph
 import com.guri.guridocpat.doctordashboard.data.BottomNavItem
 
 @Composable
@@ -55,7 +55,7 @@ fun DoctorDashboardScreen(
         Box(
             modifier = Modifier.padding(paddingValues)
         ) {
-            NavigationGraph(navController = navController) { isVisible ->
+            DoctorBottomBarNavigationGraph(navController = navController) { isVisible ->
                 buttonsVisible = isVisible
             }
         }

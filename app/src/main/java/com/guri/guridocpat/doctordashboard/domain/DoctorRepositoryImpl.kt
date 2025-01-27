@@ -41,7 +41,7 @@ class DoctorRepositoryImpl @Inject constructor(
         emit(docSnapshot.toObject(Doctor::class.java))
     }
 
-    override fun getAppointmentsForDoctor(doctorId: String): Flow<List<Appointment>> = flow {
+    override fun getAllAppointments(doctorId: String): Flow<List<Appointment>> = flow {
         val snapshot = firestore.collection("appointments")
             .whereEqualTo("doctorId", doctorId)
             .get()
@@ -75,7 +75,7 @@ class DoctorRepositoryImpl @Inject constructor(
         return try {
             val availabilityMap = mutableMapOf<Date, List<TimeSlot>>()
             var availability: Availability? = null
-            var slots = mutableListOf<TimeSlot>()
+            var slots: MutableList<TimeSlot>
             val snapshot = firestore.collection("availability")
                 .whereEqualTo("doctorId", doctorId)
                 .get()

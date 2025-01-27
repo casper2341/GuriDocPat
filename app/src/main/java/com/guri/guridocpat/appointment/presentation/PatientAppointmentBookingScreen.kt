@@ -48,6 +48,14 @@ fun PatientAppointmentBookingScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
+            Text("Book Appointment")
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Slot $slot")
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Date $date")
+            Spacer(modifier = Modifier.height(16.dp))
+            Text("Book Appointment")
+            Spacer(modifier = Modifier.height(16.dp))
             TextField(value = name, onValueChange = { name = it }, label = { Text("Name") })
             Spacer(modifier = Modifier.height(8.dp))
             TextField(value = symptoms, onValueChange = { symptoms = it }, label = { Text("Age") })
@@ -64,7 +72,9 @@ fun PatientAppointmentBookingScreen(
                     doctorId = doctorId,
                     name = name,
                     symptoms = symptoms,
-                    note = note
+                    note = note,
+                    date = date,
+                    slot = slot
                 )
             }) {
                 Text("Request for Appointment")

@@ -9,12 +9,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.guri.guridocpat.doctordashboard.data.BottomNavItem
-import com.guri.guridocpat.doctordashboard.presentation.DoctorBottomBar
 import com.guri.guridocpat.patientdashboard.PatientBottomBarNavigationGraph
 
 @Composable

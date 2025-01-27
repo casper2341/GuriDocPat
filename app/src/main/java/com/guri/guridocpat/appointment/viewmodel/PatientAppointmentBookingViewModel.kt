@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.guri.guridocpat.common.data.Appointment
+import com.guri.guridocpat.common.data.TimeSlot
 import com.guri.guridocpat.doctordashboard.domain.DoctorRepository
 import com.guri.guridocpat.patientdashboard.domain.PatientRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -33,7 +35,9 @@ class PatientAppointmentBookingViewModel @Inject constructor(
         doctorId: String,
         name: String,
         symptoms: String,
-        note: String
+        note: String,
+        date: Date,
+        slot: TimeSlot
     ) {
         _state.value = _state.value.copy(showLoader = true)
 
@@ -44,19 +48,26 @@ class PatientAppointmentBookingViewModel @Inject constructor(
             patientName = name,
             symptoms = symptoms,
             patientNotes = note,
-            status = "pending"
+            status = "pending",
+            appointmentDate = date,
+            appointmentTime = slot
         )
 
         viewModelScope.launch {
             try {
                 patientRepository.bookAppointment(appointmentRequest, callback = { success, message ->
                     if (success) {
-                        _state.value = _state.value.copy(showLoader = false)
-                    } else {
-                        _state.update {
-                            it.copy(
+                        println("Gurdeep success $message")
+                        _state.value = _state.value.copy(
                             showLoader = false,
                             requestSuccess = true
+                        )
+                    } else {
+                        println("Gurdeep failure $message")
+                        _state.update {
+                            it.copy(
+                                showLoader = false,
+                                requestSuccess = false
                             )
                         }
                     }

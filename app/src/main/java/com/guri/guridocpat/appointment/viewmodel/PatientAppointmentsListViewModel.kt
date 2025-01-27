@@ -5,20 +5,19 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.guri.guridocpat.common.data.Appointment
 import com.guri.guridocpat.common.data.Availability
-import com.guri.guridocpat.doctordashboard.domain.DoctorRepository
+import com.guri.guridocpat.patientdashboard.domain.PatientRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AppointmentListViewModel @Inject constructor(
-    firebaseAuth: FirebaseAuth,
-    private val doctorRepository: DoctorRepository
+class PatientAppointmentsListViewModel @Inject constructor(
+    val firebaseAuth: FirebaseAuth,
+    private val patientRepository: PatientRepository,
 ) : ViewModel() {
-
-    val doctorId = firebaseAuth.currentUser?.uid.orEmpty()
 
     private val _appointments = MutableStateFlow<List<Appointment>>(emptyList())
     val appointments: StateFlow<List<Appointment>> = _appointments
@@ -28,29 +27,23 @@ class AppointmentListViewModel @Inject constructor(
 
     init {
         loadAppointments()
-        loadAvailability()
     }
 
     private fun loadAppointments() {
         viewModelScope.launch {
-            doctorRepository.getAppointmentsForDoctor(doctorId).collect {
+            patientRepository
+                .getAllAppointments(firebaseAuth.currentUser?.uid.orEmpty())
+                .catch {
+                println("Gurdeep error load appointments")
+            }.collect {
                 _appointments.value = it
-            }
-        }
-    }
-
-    private fun loadAvailability() {
-        viewModelScope.launch {
-            doctorRepository.getAvailabilityForDoctor(doctorId).collect {
-                _availability.value = it
             }
         }
     }
 
     fun updateAppointmentStatus(appointmentId: String, newStatus: String) {
         viewModelScope.launch {
-            doctorRepository.updateAppointmentStatus(appointmentId, newStatus)
-            loadAppointments()
+
         }
     }
 }

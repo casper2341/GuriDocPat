@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import com.google.gson.Gson
 import com.guri.guridocpat.appnavgraph.Screens
 import com.guri.guridocpat.appointment.presentation.PatientAppointmentBookingScreen
+import com.guri.guridocpat.appointment.presentation.PatientAppointmentListScreen
 import com.guri.guridocpat.appointment.presentation.PatientDateBookingScreen
 import com.guri.guridocpat.availability.presentation.PatientAvailabilityScreen
 import com.guri.guridocpat.common.data.TimeSlot
@@ -36,9 +37,8 @@ fun PatientBottomBarNavigationGraph(
             onBottomBarVisibilityChanged(true)
         }
         composable(BottomNavItem.Appointments.route) {
-            //  AppointmentsScreen()
             onBottomBarVisibilityChanged(true)
-            Text("Gurdeep Appointments")
+            PatientAppointmentListScreen()
         }
         composable(BottomNavItem.Profile.route) {
             ProfileScreen(viewModel = hiltViewModel(), navController = navController)
@@ -67,11 +67,12 @@ fun PatientBottomBarNavigationGraph(
             val dateJson = Gson().fromJson(date, Date::class.java)
             val slotJson = Gson().fromJson(slot, TimeSlot::class.java)
             println("Gurdeep argument values are $doctorId $dateJson $slotJson")
-//            PatientAppointmentBookingScreen(
-//                doctorId = doctorId,
-//                date = date,
-//                slot = slot,
-//                navController = navController)
+            PatientAppointmentBookingScreen(
+                doctorId = doctorId,
+                date = dateJson,
+                slot = slotJson,
+                navController = navController
+            )
         }
         composable("bookDate/{doctorId}") { backStackEntry ->
             val doctorId = backStackEntry.arguments?.getString("doctorId").orEmpty()
