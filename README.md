@@ -32,14 +32,6 @@ GuriDocPat is a comprehensive healthcare platform that connects doctors and pati
 - Real-time appointment scheduling
 - Multiple consultation types (In-person, Online)
 - Appointment status tracking (Pending, Confirmed, Cancelled)
-- Follow-up appointment scheduling
-- Payment status tracking
-- Rating and feedback system
-
-### 💬 Communication
-- Chat functionality between doctors and patients
-- Appointment notifications
-- Real-time updates
 
 ## 🏗️ Architecture
 
