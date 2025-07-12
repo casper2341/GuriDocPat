@@ -11,7 +11,6 @@ plugins {
 android {
     namespace = "com.guri.guridocpat"
     compileSdk = 36
-    buildToolsVersion = "23.0.1"
 
     defaultConfig {
         applicationId = "com.guri.guridocpat"
@@ -85,20 +84,20 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
     implementation(libs.firebase.analytics)
 
-    implementation("com.google.firebase:firebase-storage-ktx")
-    implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation(libs.google.firebase.storage.ktx)
+    implementation(libs.google.firebase.firestore.ktx)
 
     
-    implementation("com.google.dagger:hilt-android:2.56.2")
-    kapt("com.google.dagger:hilt-android-compiler:2.56.2")
-    kapt("androidx.hilt:hilt-compiler:1.2.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.androidx.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.9.1")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.6")
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.play.services.auth)
 
-    implementation("com.google.code.gson:gson:2.13.1")
+    implementation(libs.gson)
 }
 
 kapt {
